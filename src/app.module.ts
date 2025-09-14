@@ -8,9 +8,16 @@ import {Post}from './posts/entites/post.entity'
 import {User}from './auth/entites/user-entity'
 import{ThrottlerModule} from '@nestjs/throttler'
 import { CacheModule } from '@nestjs/cache-manager';
+import { ConfigModule } from '@nestjs/config';
+import { FileUploadModule } from './file-upload/file-upload.module';
+import { FileEntity } from './file-upload/entites/file.entity';
+import { EventsModule } from './events/events.module';
 @Module({
   imports: [
-    ThrottlerModule.forRoot({
+ConfigModule.forRoot({
+  isGlobal:true,
+})
+    ,    ThrottlerModule.forRoot({
       throttlers: [
         {
           ttl: 60000,
@@ -32,13 +39,15 @@ import { CacheModule } from '@nestjs/cache-manager';
       username:'postgres',
       password:'postgres',
       database:"RestAPI-nest-project",
-      entities:[Post, User],
+      entities:[Post, User,FileEntity],
       synchronize :true, // for development part to create the schema
 
     })
     ,
     PostsModule,
-    AuthModule],
+    AuthModule,
+    FileUploadModule,
+    EventsModule],
   controllers: [AppController],
   providers: [AppService],
 })

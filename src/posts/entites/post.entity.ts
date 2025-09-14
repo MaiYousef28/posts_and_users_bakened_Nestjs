@@ -1,6 +1,6 @@
 import { User } from "src/auth/entites/user-entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-
+import { ApiBearerAuth, ApiOperation,ApiResponse,ApiTags,} from '@nestjs/swagger';
 
 
 

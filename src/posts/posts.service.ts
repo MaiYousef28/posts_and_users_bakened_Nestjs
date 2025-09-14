@@ -96,7 +96,8 @@ private postListCashKeys :Set<string>= new Set();
             authorName
         }) 
             
-        
+        // we add a method to vaildate the exsisting cache to see if the new one is exist on it or not 
+        await this.invalidateAllExsistingCache()
         return this.postsRpository.save(newlyCreatedPost);
           
         };
@@ -116,8 +117,10 @@ private postListCashKeys :Set<string>= new Set();
     if(updatePostData.content){
         findPostToUpdate.content = updatePostData.content
     }
-        
-      return this.postsRpository.save(findPostToUpdate);    }
+    const updatePost = this.postsRpository.save(findPostToUpdate);
+       await this.cacheManager.del(`post${id}`)  
+       await this.invalidateAllExsistingCache()      
+      return updatePost  }
 
 
     
@@ -125,9 +128,19 @@ private postListCashKeys :Set<string>= new Set();
 
         const findPostToDelete = await this.findOne(id)
 
+        await this.cacheManager.del(`post${id}`)
       await this.postsRpository.remove(findPostToDelete)
 
     }
+
+private async invalidateAllExsistingCache():Promise<void>{
+console.log(`Invalidating${this.postListCashKeys.size} list cash entires`)
+
+for (const key of this.postListCashKeys){
+  await this.cacheManager.del(key)
+}
+this.postListCashKeys.clear()
+}
 
 
 }
