@@ -6,6 +6,7 @@ import { RegisteerDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt'
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { UserEventsService } from 'src/events/user-event.service';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +14,8 @@ export class AuthService {
 constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private jwtService: JwtService
+    private jwtService: JwtService ,
+    private readonly userEventsService: UserEventsService
 ){
         bcrypt.hash("123456",10).then(console.log)
 
@@ -37,13 +39,15 @@ async register(registerDto :RegisteerDto){
     }
 
     const savedUser = await this.usersRepository.save(newlyCreatUser);
-
+    // emit event 
+    this.userEventsService.emitUserRegisterd(savedUser)
     const { password , ...result} = savedUser;
     return{
         user : result,
         message : ' registeration successfuly! Please login to continueo'
     } 
 }
+
 
 // function for create admin user 
 async createAdmin(registerDto :RegisteerDto){

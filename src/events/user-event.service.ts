@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { timeStamp } from "console";
 import { User } from "src/auth/entites/user-entity";
 
 
@@ -15,7 +14,7 @@ export interface UseRegisteredEvent{
 }
 
 @Injectable()
-export class UseEventsService{
+export class UserEventsService{
     constructor(
         private readonly eventEmitter: EventEmitter2
     ){}
@@ -30,6 +29,8 @@ export class UseEventsService{
             },
             timeStamp: new Date()
         }
+                console.log('hello', userRegisteredData)
+
         this.eventEmitter.emit('user.registered', userRegisteredData)
     }
 }

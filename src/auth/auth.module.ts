@@ -7,6 +7,7 @@ import {JwtModule} from '@nestjs/jwt'
 import {PassportModule}from '@nestjs/passport'
 import { JwtStrategy } from './stratgeies/jwt.strategy';
 import { RoleGuard } from './gaurds/roles-guards';
+import { EventsModule } from 'src/events/events.module';
 
 
 @Module({
@@ -19,6 +20,7 @@ import { RoleGuard } from './gaurds/roles-guards';
       //secret: 'your-secret-key', // 🔐 use process.env.JWT_SECRET in real apps
       signOptions: { expiresIn: '1h' }
     }),
+    EventsModule ,
     ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy,RoleGuard],
