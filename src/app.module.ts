@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestMiddleware, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PostsModule } from './posts/posts.module';
@@ -12,6 +12,7 @@ import { ConfigModule } from '@nestjs/config';
 import { FileUploadModule } from './file-upload/file-upload.module';
 import { FileEntity } from './file-upload/entites/file.entity';
 import { EventsModule } from './events/events.module';
+import { LoggerMiddleware } from './common/middleware/logger.middlerware';
 @Module({
   imports: [
 ConfigModule.forRoot({
@@ -51,4 +52,8 @@ ConfigModule.forRoot({
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule{
+  configure(consumer :MiddlewareConsumer){
+    consumer.apply(LoggerMiddleware).forRoutes('*')
+  }
+}

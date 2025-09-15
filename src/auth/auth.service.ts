@@ -17,7 +17,7 @@ constructor(
     private jwtService: JwtService ,
     private readonly userEventsService: UserEventsService
 ){
-        bcrypt.hash("123456",10).then(console.log)
+    //  bcrypt.hash("123456",10).then(console.log)
 
 }
 
